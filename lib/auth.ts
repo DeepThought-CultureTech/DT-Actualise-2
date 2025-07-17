@@ -32,9 +32,11 @@ export const authOptions: NextAuthConfig = {
                     });
         
                     (user as any).mongoId = result.insertedId.toString();
+                    (user as any).status = 'AUTHENTICATED' 
 
                 } else {
                     (user as any).mongoId = existingUser._id.toString();
+                    (user as any).status = existingUser.status;
                 }
 
                 return true;
@@ -42,19 +44,27 @@ export const authOptions: NextAuthConfig = {
             return false;
         },
 
-        async jwt({ token, account, user }: { token: JWT, account?: Account | null, user?: User }) {
+        async jwt({ token, trigger, session, account, user }: { token: JWT, trigger?: 'signIn' | 'signUp' | 'update', session?: Session,  account?: Account | null, user?: User }) {
             if (user && account) {
                 token.uid = (user as any).mongoId
+                token.status = (user as any).status;
                 token.email = user.email;
                 token.name = user.name;
                 token.picture = user.image;
             }
+
+            if(trigger == "update" && session?.user) {
+                console.log('updating status', session);
+                token.status = session.user.status;
+            }
+            
             return token;
         },
 
         async session({ session, token }: { session: Session, token: JWT }) {
             if (session.user) {
                 session.user.uid = token.uid as string;
+                session.user.status = token.status as string;
                 session.user.name = token.name;
                 session.user.email = token.email;
                 session.user.image = token.picture;
@@ -69,6 +79,7 @@ declare module "next-auth" {
         user: {
             uid: string;
             name?: string | null;
+            status: string | null;
             email?: string | null;
             image?: string | null;
         };

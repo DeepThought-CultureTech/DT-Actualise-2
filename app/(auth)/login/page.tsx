@@ -8,6 +8,7 @@ import axios from "axios";
 
 const LoginButton = dynamic(() => import("@/components/login/LoginButton"), { ssr: false });
 const RoleSelector = dynamic(() => import("@/components/login/RoleSelector"), { ssr: false });
+const RoundBasedCTA = dynamic(() => import("@/components/login/RoundBasedCTA"), { ssr: false });
 
 interface Role {
   roleId: string;
@@ -19,6 +20,8 @@ export default function LoginPage() {
   const { showToast } = useToast();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
+
+  console.log(session);
 
   useEffect(() => {
     if (status === "authenticated") {

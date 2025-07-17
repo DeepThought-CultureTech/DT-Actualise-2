@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/Toast';
+import { updateUserStatus } from '@/lib/apiUtil';
 import axios from 'axios';
 
 type Role = {
@@ -24,10 +25,10 @@ type Role = {
 
 export default function RoleGallerySection() {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+  // const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [activeCard, setActiveCard] = useState<Role | null>(null);
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -44,29 +45,11 @@ export default function RoleGallerySection() {
     fetchRoles();
   }, []);
 
-  const toggleBookmark = (id: string) => {
-    setBookmarkedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
-
-  const updateUserStatus = async (userId: string, newStatus: string) => {
-    try {
-      const response = await axios.put('/api/v1/user/status', {
-        userId,
-        newStatus,
-      });
-
-      if (response.status !== 200) {
-        showToast('error', 'Status update failed', 3000);
-        return false;
-      }
-      return true;
-    } catch {
-      showToast('error', 'Status update failed', 3000);
-      return false;
-    }
-  };
+  // const toggleBookmark = (id: string) => {
+  //   setBookmarkedIds((prev) =>
+  //     prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  //   );
+  // };
 
   const initiateRound1 = async (userId: string, roleId: string) => {
     try {
@@ -102,7 +85,7 @@ export default function RoleGallerySection() {
     const userId = session.user.uid;
     showToast('loading', 'Initiating Round 1', 3000);
 
-    const statusUpdated = await updateUserStatus(userId, 'ROUND_1');
+    const statusUpdated = await updateUserStatus(userId, 'ROUND_1', update);
     if (!statusUpdated) return;
 
     const attemptId = await initiateRound1(userId, roleId);

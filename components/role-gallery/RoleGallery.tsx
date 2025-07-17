@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../Toast'; 
+import { updateUserStatus } from '@/lib/apiUtil';
 import axios from 'axios';
 
 type Role = {
@@ -21,7 +22,7 @@ export default function RoleGallerySection() {
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [activeCard, setActiveCard] = useState<Role | null>(null);
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -41,24 +42,6 @@ export default function RoleGallerySection() {
     setBookmarkedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
-  };
-
-  const updateUserStatus = async (userId: string, newStatus: string) => {
-    try {
-      const response = await axios.put('/api/v1/user/status', {
-        userId,
-        newStatus
-      });
-
-      if (response.status !== 200) {
-        showToast('error', 'Status update failed', 3000);
-        return false;
-      }
-      return true;
-    } catch (err) {
-      showToast('error', 'Status update failed', 3000);
-      return false;
-    }
   };
 
   const initiateRound1 = async (userId: string, roleId: string) => {
@@ -90,7 +73,7 @@ export default function RoleGallerySection() {
     showToast('loading', 'Initiating Round 1', 3000);
 
     try {
-      const statusUpdated = await updateUserStatus(userId, 'ROUND_1');
+      const statusUpdated = await updateUserStatus(userId, 'ROUND_1', update);
       if (!statusUpdated) return;
 
       const attemptId = await initiateRound1(userId, roleId);

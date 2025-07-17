@@ -1,13 +1,6 @@
 import axios from 'axios';
 
-/**
- * Updates a user's status
- * @param {string|number} userId - The ID of the user
- * @param {string} newStatus - The new status to set
- * @returns {Promise<boolean>} - Returns true if successful, false otherwise
- */
-
-export const updateUserStatus = async (userId: string, newStatus: string) => {
+export const updateUserStatus = async (userId: string, newStatus: string, update: (user: object) => any) => {
   try {
     const response = await axios({
       url: '/api/v1/user/status',
@@ -25,6 +18,8 @@ export const updateUserStatus = async (userId: string, newStatus: string) => {
       // TODO: add notification toasts to show API failure
       return false;
     }
+
+    await update({ user: { status: newStatus } });
     
     // TODO: add notification toast to show API success
     return true;

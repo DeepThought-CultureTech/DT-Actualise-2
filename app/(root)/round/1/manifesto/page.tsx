@@ -10,12 +10,11 @@ import { useEffect, useState } from 'react';
 
 
 export default function ManifestoPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const { showToast } = useToast();
   const router = useRouter();
   const [whatsappLink, setWhatsappLink] = useState('');
-
-  if(status != 'authenticated') router.push('/login');
+  
   const questions = [
     {
       id: 1,
@@ -71,6 +70,8 @@ export default function ManifestoPage() {
   };
 
   const handleManifestoSubmit = async () => {
+    const userId = session?.user.uid || '';
+    
     const allFilled = Object.values(answers).every((ans) => ans.trim() !== '');
     const allWithinLimit = Object.values(answers).every((ans) => ans.trim().length <= 1000);
     if (!allFilled) {
@@ -87,7 +88,7 @@ export default function ManifestoPage() {
     setLoading(true);
 
     const payload = {
-      userId: session?.user.uid,
+      userId,
       user_email: session?.user.email,
       q1: answers[1],
       q2: answers[2],
@@ -110,6 +111,7 @@ export default function ManifestoPage() {
         setLoading(false);
         setWhatsappLink(response.data.whatsappLink);
         showToast('success', 'Manifesto Submitted', 3000);
+        await updateUserStatus(userId, 'ROUND_2', update);
       } else {
         setLoading(false);
         setShowModal(false);
@@ -168,7 +170,17 @@ export default function ManifestoPage() {
                 <p className="text-gray-700">Submitting your manifesto...</p>
               </div>
             ) : (
-              <div>
+
+              <Round2WhatsappGroup />
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  function Round2WhatsappGroup () {
+    return <div>
                 <h2 className="flex justify-center text-lg font-bold text-gray-800 mb-[-15px]">Round 1 Completed!!🎉🤩</h2>
                 <div className="my-6 text-center space-y-2">
                   <p className="text-blue-600 text-xl font-semibold">Thanks for staying sharp.</p>
@@ -194,10 +206,5 @@ export default function ManifestoPage() {
                   </button>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  }
 }
