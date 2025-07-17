@@ -21,8 +21,6 @@ export default function LoginPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(session);
-
   useEffect(() => {
     if (status === "authenticated") {
       showToast('success', 'Logged in', 3000); // show a toast notification.
@@ -36,9 +34,9 @@ export default function LoginPage() {
             }
           });
 
-          if(response.status != 200) return;
-          
-          const formattedRoles = response.data.roles.map((role : any) => {
+          if (response.status != 200) return;
+
+          const formattedRoles = response.data.roles.map((role: any) => {
             return { roleId: role._id, roleTitle: role.roleTitle }
           })
 
@@ -63,14 +61,33 @@ export default function LoginPage() {
         <div>
           <h1 className="text-2xl font-bold text-blue-600">Welcome to DeepThought Actualize</h1>
           <p className="text-sm text-gray-500">
-            {status === "authenticated" ? "Select your role to get started" : "Please log in to continue"}
+            {status === "authenticated" ? "Continue your journey" : "Please log in to continue"}
           </p>
         </div>
 
         {status === "loading" || loading ? (
           <p className="text-gray-500 animate-pulse ">Loading...</p>
         ) : status === "authenticated" ? (
-          <RoleSelector uid={session?.user?.uid} roles={roles} />
+          (() => {
+
+            const userStatus = session?.user?.status;
+            if (
+              (userStatus === "AUTHENTICATED" ||
+                userStatus === "ROUND_1" ||
+                userStatus === "MANIFESTO") &&
+              roles.length > 0
+            ) {
+              return <RoleSelector uid={session.user.uid} roles={roles} />;
+            }
+            if (userStatus === "ROUND_2") {
+              return <RoundBasedCTA round={2} />;
+            }
+            if (userStatus === "ROUND_3") {
+              return <RoundBasedCTA round={3} />;
+            }
+
+            return <p className="text-gray-500 animate-pulse ">Loading...</p>
+          })()
         ) : (
           <div className="flex justify-center">
             <LoginButton />

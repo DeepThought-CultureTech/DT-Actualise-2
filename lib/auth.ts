@@ -12,6 +12,7 @@ export const authOptions: NextAuthConfig = {
     ],
     secret: process.env.AUTH_SECRET as string,
     session: { strategy: "jwt" },
+    trustHost: true,
     callbacks: {
         async signIn({ user, account, profile }: { user?: User | null, account?: Account | null, profile?: Profile | null }) {
             if (!account || !profile || !user) return false;
@@ -54,7 +55,6 @@ export const authOptions: NextAuthConfig = {
             }
 
             if(trigger == "update" && session?.user) {
-                console.log('updating status', session);
                 token.status = session.user.status;
             }
             
