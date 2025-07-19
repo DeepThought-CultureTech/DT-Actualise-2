@@ -1,5 +1,6 @@
 "use client"
 import GrowthManifesto from '@/components/manifesto/GrowthManifesto';
+import ManifestoSubmitModal from '@/components/manifesto/ManifestoSubmitModal';
 import { useToast } from '@/components/Toast';
 import { updateUserStatus } from '@/lib/apiUtil';
 import axios from 'axios';
@@ -52,7 +53,7 @@ export default function ManifestoPage() {
         validateStatus: (status) => { return status < 500 }
       });
 
-      if(response.status == 409) {
+      if (response.status == 409) {
         setWhatsappLink(response.data.whatsappLink)
         setShowModal(true)
       }
@@ -122,7 +123,7 @@ export default function ManifestoPage() {
 
   };
 
-  return  (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl mx-auto">
         {/* Instruction */}
@@ -197,6 +198,13 @@ export default function ManifestoPage() {
             )}
           </div>
         </div>
+        // <ManifestoSubmitModal
+        //   show={showModal}
+        //   loading={loading}
+        //   linkToRedirect="/round/2/hooks" // Update path as needed
+        //   onCopy={handleCopyLink}
+        // />
+
       )}
     </div>
   );
