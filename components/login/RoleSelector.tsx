@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../Toast";
+import { updateUserStatus } from "@/lib/apiUtil";
 import axios from 'axios';
 
 type Role = {
@@ -19,27 +20,11 @@ type RoleSelectorProps = {
 export default function RoleSelector({ uid, roles }: RoleSelectorProps) {
   const [selectedRole, setSelectedRole] = useState<Role>();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
   const { showToast } = useToast();
 
   if(!session) return <div>Not logged in</div> // add a page to show not logged in
-
-  const updateUserStatus = async (userId: string, newStatus: string) => {
-    const response = await axios({
-      url: '/api/v1/user/status',
-      method: 'PUT',
-      headers: {
-        'Content-Type': "application/json"
-      },
-      data: {
-        userId, newStatus
-      }
-    });
-
-    if(response.status != 200) return false; // add notification toasts to show whether APIs have failed or succeeded
-    return true;
-  };
 
   const initiateRound1 = async (userId: string, roleId: string) => {
     const response = await axios.post('/api/v1/round/1/attempt', {
@@ -68,7 +53,7 @@ export default function RoleSelector({ uid, roles }: RoleSelectorProps) {
 
     try {
       
-      await updateUserStatus(session.user.uid, 'ROUND_1')
+      await updateUserStatus(session.user.uid, 'ROUND_1', update)
       const initiateRound1Id = await initiateRound1(session.user.uid, selectedRole.roleId);
       router.push(`/round/1?id=${initiateRound1Id}`);
     } catch (error) {
