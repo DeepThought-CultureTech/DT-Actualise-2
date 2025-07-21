@@ -1,5 +1,6 @@
 "use client"
 import GrowthManifesto from '@/components/manifesto/GrowthManifesto';
+import ManifestoSubmitModal from '@/components/manifesto/ManifestoSubmitModal';
 import { useToast } from '@/components/Toast';
 import { updateUserStatus } from '@/lib/apiUtil';
 import axios from 'axios';
@@ -10,11 +11,12 @@ import { useEffect, useState } from 'react';
 
 
 export default function ManifestoPage() {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
   const { showToast } = useToast();
   const router = useRouter();
   const [whatsappLink, setWhatsappLink] = useState('');
-  
+
+  if(status != 'authenticated') router.push('/login');
   const questions = [
     {
       id: 1,
@@ -51,7 +53,7 @@ export default function ManifestoPage() {
         validateStatus: (status) => { return status < 500 }
       });
 
-      if(response.status == 409) {
+      if (response.status == 409) {
         setWhatsappLink(response.data.whatsappLink)
         setShowModal(true)
       }
@@ -70,8 +72,6 @@ export default function ManifestoPage() {
   };
 
   const handleManifestoSubmit = async () => {
-    const userId = session?.user.uid || '';
-    
     const allFilled = Object.values(answers).every((ans) => ans.trim() !== '');
     const allWithinLimit = Object.values(answers).every((ans) => ans.trim().length <= 1000);
     if (!allFilled) {
@@ -88,7 +88,7 @@ export default function ManifestoPage() {
     setLoading(true);
 
     const payload = {
-      userId,
+      userId: session?.user.uid,
       user_email: session?.user.email,
       q1: answers[1],
       q2: answers[2],
@@ -111,7 +111,6 @@ export default function ManifestoPage() {
         setLoading(false);
         setWhatsappLink(response.data.whatsappLink);
         showToast('success', 'Manifesto Submitted', 3000);
-        await updateUserStatus(userId, 'ROUND_2', update);
       } else {
         setLoading(false);
         setShowModal(false);
@@ -124,7 +123,7 @@ export default function ManifestoPage() {
 
   };
 
-  return  (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl mx-auto">
         {/* Instruction */}
@@ -170,17 +169,7 @@ export default function ManifestoPage() {
                 <p className="text-gray-700">Submitting your manifesto...</p>
               </div>
             ) : (
-
-              <Round2WhatsappGroup />
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  function Round2WhatsappGroup () {
-    return <div>
+              <div>
                 <h2 className="flex justify-center text-lg font-bold text-gray-800 mb-[-15px]">Round 1 Completed!!🎉🤩</h2>
                 <div className="my-6 text-center space-y-2">
                   <p className="text-blue-600 text-xl font-semibold">Thanks for staying sharp.</p>
@@ -206,5 +195,17 @@ export default function ManifestoPage() {
                   </button>
                 </div>
               </div>
-  }
+            )}
+          </div>
+        </div>
+        // <ManifestoSubmitModal
+        //   show={showModal}
+        //   loading={loading}
+        //   linkToRedirect="/round/2/hooks" // Update path as needed
+        //   onCopy={handleCopyLink}
+        // />
+
+      )}
+    </div>
+  );
 }
