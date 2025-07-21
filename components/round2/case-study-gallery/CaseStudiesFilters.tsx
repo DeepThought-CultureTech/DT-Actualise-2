@@ -1,8 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 
 const roles = ['All', 'Business Growth Analyst', 'Behavioral Designer', 'Product Manager'];
 
@@ -20,18 +18,17 @@ export default function RoleFilters({ selected, onSelect }: RoleFiltersProps) {
       transition={{ delay: 0.2, duration: 0.4 }}
     >
       {roles.map((role) => (
-        <Button
+        <button
           key={role}
-          variant={selected === role ? 'default' : 'outline'}
-          className={`text-sm rounded-3xl font-medium transition-transform   ${
-            selected === role
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-muted text-foreground'
-          } hover:scale-105`}
           onClick={() => onSelect(role)}
+          className={`px-4 py-2 text-sm rounded-full font-medium transition-transform duration-200 border
+            ${selected === role
+              ? 'bg-blue-600 text-white shadow-md border-transparent'
+              : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300'}
+            hover:scale-105`}
         >
           {role}
-        </Button>
+        </button>
       ))}
     </motion.div>
   );
