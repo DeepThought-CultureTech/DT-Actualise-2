@@ -19,7 +19,7 @@ import { updateUserStatus } from '@/lib/apiUtil';
 const Round1Content: React.FC = () => {
   const MIN_CHARS = 150;
   const { showToast } = useToast();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const { getStorageItem, setStorageItem, removeStorageItem } = useStorage();
   const attemptId = useSearchParams().get('id'); // This is now inside Suspense boundary
   const router = useRouter();
@@ -89,7 +89,6 @@ const Round1Content: React.FC = () => {
         response.data.scenarios.forEach((scenario: any) =>{
           totalQuestions += scenario.questions.length;
         });
-        console.log(totalQuestions);
         setTotalQuestions(totalQuestions);
         setQuestionsData(response.data.scenarios || []);
         setRoleTitle(response.data.roleTitle);
@@ -223,13 +222,13 @@ const Round1Content: React.FC = () => {
           cleanUp();
           router.push('/round/1/role-gallery')
         }}
-        onLockIn={() => {
+        onLockIn={async () => {
           if (!session) {
             showToast('error', 'Session Not Found', 3000);
             return
           }
           cleanUp();
-          updateUserStatus(session?.user.uid, 'MANIFESTO');
+          updateUserStatus(session?.user.uid, 'MANIFESTO', update);
           router.push(`/round/1/manifesto`)
         }}
       />
