@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 export default function Guide() {
   return (
-    <section className="bg-white py-20 px-6">
+    <section className="bg-white py-10 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
-        <div>
+        <div className=''>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-10">
             What You'll Be Doing
           </h2>
@@ -21,7 +21,7 @@ export default function Guide() {
             <Step
               number="2"
               title="Commit With Clarity"
-              description="Reflect on what you’ve learned in Round 1. Celebrate your growth, write your baby steps, and set a self-defined timeline."
+              description="Celebrate your growth, write your baby steps, and set a self-defined timeline."
             />
             <Step
               number="3"
@@ -32,13 +32,13 @@ export default function Guide() {
         </div>
 
         {/* Right Image */}
-        <div className="rounded-3xl overflow-hidden shadow-lg">
+        <div className="rounded-3xl overflow-hidden bg-grey-300 shadow-lg">
           <Image
-            src="/images/round-2-laptop.png"
+            src="/round2steps.svg"
             alt="Person working with analytics"
             width={800}
-            height={600}
-            className="w-full h-auto object-cover"
+            height={300}
+            className="h-auto object-cover"
           />
         </div>
       </div>

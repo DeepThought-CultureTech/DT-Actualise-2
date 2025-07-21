@@ -1,4 +1,4 @@
-import { Sprout, Lightbulb } from "lucide-react";
+import { Sprout, Lightbulb, ActivityIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 export const MindsetSection = () => {
@@ -18,6 +18,12 @@ export const MindsetSection = () => {
           icon={<Lightbulb size={28} className="text-indigo-800" />}
           title="Curiosity Over Certainty"
           description="Approach challenges with genuine curiosity. The best insights come from exploring the unknown."
+          bgColor="#dbeafe"
+        />
+        <MindsetCard
+          icon={<ActivityIcon size={28} className="text-blue-600" />}
+          title="Action Over Analysis"
+          description="Don't get stuck waiting for the perfect plan. Clarity comes through action, take initiative, learn, and adjust as you go."
           bgColor="#dbeafe"
         />
       </div>
@@ -40,7 +46,7 @@ interface MindsetCardProps {
   bgColor,
 }: MindsetCardProps) => {
   return (
-    <div className="flex flex-col items-center text-center bg-white p-6 rounded-2xl shadow-md max-w-sm w-full">
+    <div className="flex flex-col items-center text-center bg-white p-6 rounded-2xl shadow-md max-w-md w-full">
       <div
         className={`p-3 rounded-xl mb-4`}
         style={{ backgroundColor: bgColor }}
@@ -48,7 +54,7 @@ interface MindsetCardProps {
         {icon}
       </div>
       <h3 className="text-xl font-bold text-gray-900">{title}</h3>
-      <p className="text-gray-600 mt-2">{description}</p>
+      <p className="text-gray-600 mt-2 text-lg">{description}</p>
     </div>
   );
 };

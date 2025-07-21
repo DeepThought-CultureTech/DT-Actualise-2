@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle } from 'lucide-react';
+import Image from "next/image";
 
 export default function RoundTwoHero() {
   return (
@@ -8,7 +8,7 @@ export default function RoundTwoHero() {
       style={{
         backgroundImage: 'linear-gradient(to bottom right, rgba(33, 109, 223, 1), #002B80)',
       }}
-      className="w-full min-h-screen flex items-center flex-col justify-center text-center text-white"
+      className="w-full min-h-[90vh] flex items-center flex-col justify-center text-center text-white"
     >
       <div className="w-full px-6 sm:px-8 md:px-12 flex flex-col items-center gap-6">
         {/* Main Title */}
@@ -20,6 +20,14 @@ export default function RoundTwoHero() {
         <p className="text-lg sm:text-xl md:text-5xl text-white/90">
           You’ve signed up for a mission
         </p>
+      </div>
+      <div>
+        <Image
+          className="h-30 m-3 mt-7 rounded-2xl border-4" 
+          src={"/round2hook.svg"} 
+          height={500} 
+          width={500} 
+          alt="Round 2 Hook"/>
       </div>
       <div>
         <button
