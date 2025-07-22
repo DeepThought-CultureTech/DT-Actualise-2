@@ -36,14 +36,14 @@ export default function HeroSection({ search, onSearchChange }: Props) {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="relative max-w-md mx-auto flex items-center"
         >
-          <Search className="absolute left-3 text-white w-5 h-5" />
+          <Search className="absolute left-[-40px] text-white w-7 h-7" />
           <input
             id="search"
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by title, keyword, or tag"
-            className="w-full pl-10 py-3 text-base bg-white/90 backdrop-blur-md shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            className="w-full pl-5 py-3 text-base bg-white/90 backdrop-blur-md shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
           />
         </motion.div>
       </div>

@@ -21,7 +21,7 @@ export default function RoleFilters({ selected, onSelect }: RoleFiltersProps) {
         <button
           key={role}
           onClick={() => onSelect(role)}
-          className={`px-4 py-2 text-sm rounded-full font-medium transition-transform duration-200 border
+          className={`px-4 py-2 text-sm rounded-full font-semibold transition-transform duration-200 
             ${selected === role
               ? 'bg-blue-600 text-white shadow-md border-transparent'
               : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300'}
