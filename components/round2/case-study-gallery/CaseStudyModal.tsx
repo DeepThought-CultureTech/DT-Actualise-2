@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { X, ExternalLink } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CaseStudy {
   id: string;
@@ -18,6 +19,7 @@ interface CaseStudyModalProps {
 }
 
 const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => {
+  const router = useRouter();
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -33,7 +35,8 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
   if (!isOpen || !caseStudy) return null;
 
   const handleLockInRole = () => {
-    alert(`Locked in as ${caseStudy.role}! Redirecting...`);
+    // alert(`Locked in as ${caseStudy.role}! Redirecting...`);
+    router.push('/round/2/baby-step');
   };
 
   return (

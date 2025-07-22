@@ -22,13 +22,13 @@ const CaseStudyCard = ({ caseStudy, onViewCase }: CaseStudyCardProps) => {
     >
       <div>
         <div className="flex justify-between items-start mb-3">
-          <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800 font-medium">
+          <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold">
             {caseStudy.role}
           </span>
-          <div className="flex items-center text-xs text-gray-500">
+          {/* <div className="flex items-center text-xs text-gray-500">
             <Users className="h-3 w-3 mr-1" />
             {caseStudy.readCount}+ readers
-          </div>
+          </div> */}
         </div>
 
         <h3 className="text-lg font-semibold group-hover:text-blue-600 transition-colors mb-2">
@@ -43,7 +43,7 @@ const CaseStudyCard = ({ caseStudy, onViewCase }: CaseStudyCardProps) => {
           {caseStudy.tags.map((tag, index) => (
             <span
               key={index}
-              className="text-xs px-2 py-0.5 border border-gray-300 rounded-full text-gray-600"
+              className="text-xs font-semibold px-2 py-0.5 border border-gray-300 rounded-full text-black"
             >
               #{tag}
             </span>
@@ -53,7 +53,7 @@ const CaseStudyCard = ({ caseStudy, onViewCase }: CaseStudyCardProps) => {
 
       <button
         onClick={() => onViewCase(caseStudy)}
-        className="mt-auto w-full text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all duration-300 hover:shadow-md hover:scale-[1.02]"
+        className="mt-auto w-full text-sm font-medium bg-[#3c83f6] hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all duration-300 hover:shadow-md hover:scale-[1.02]"
       >
         View Case
       </button>
