@@ -1,35 +1,47 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
-const roles = ['All', 'Business Growth Analyst', 'Behavioral Designer', 'Product Manager'];
+interface Role {
+  id: string;
+  title: string;
+}
 
 interface RoleFiltersProps {
-  selected: string;
-  onSelect: (role: string) => void;
+  roles: Role[];
+  selectedRoleId: string | null;
+  onRoleChange: (roleId: string | null) => void;
 }
 
-export default function RoleFilters({ selected, onSelect }: RoleFiltersProps) {
+const CaseStudiesFilters = ({
+  roles,
+  selectedRoleId,
+  onRoleChange,
+}: RoleFiltersProps) => {
   return (
-    <motion.div
-      className="flex flex-wrap justify-center gap-3 mb-8"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.4 }}
-    >
+    <div className="flex gap-2 flex-wrap">
+      <button
+        onClick={() => onRoleChange(null)}
+        className={`px-4 py-1 rounded-full border ${
+          selectedRoleId === null
+            ? "bg-blue-600 text-white"
+            : "bg-white text-black"
+        }`}
+      >
+        All
+      </button>
+
       {roles.map((role) => (
         <button
-          key={role}
-          onClick={() => onSelect(role)}
-          className={`px-4 py-2 text-sm rounded-full font-semibold transition-transform duration-200 
-            ${selected === role
-              ? 'bg-blue-600 text-white shadow-md border-transparent'
-              : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300'}
-            hover:scale-105`}
+          key={role.id}
+          onClick={() => onRoleChange(role.id)}
+          className={`px-4 py-1 rounded-full border ${
+            selectedRoleId === role.id
+              ? "bg-blue-600 text-white"
+              : "bg-white text-black"
+          }`}
         >
-          {role}
+          {role.title}
         </button>
       ))}
-    </motion.div>
+    </div>
   );
-}
+};
+
+export default CaseStudiesFilters;
