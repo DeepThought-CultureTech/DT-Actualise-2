@@ -27,7 +27,7 @@ export async function connectDatabase() : Promise<{ client: MongoClient; db: Db}
 
     } catch(err) {
         console.error('Failed to connect with database', err);
-        throw new Error('Databae connection failed')
+        throw new Error('Database connection failed')
     }
 }
 

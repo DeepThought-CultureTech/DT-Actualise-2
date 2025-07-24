@@ -82,18 +82,17 @@ export default function page() {
         </div>
     )
 
-    if (isSubmitted) return (
-        <div className="fixed inset-0 z-50 h-screen flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
-                <h2 className="text-2xl font-bold text-blue-600 mb-4">🎉 Assignment Submitted!</h2>
-                <p className="text-gray-700 mb-4">Your response has been successfully recorded.</p>
-            </div>
-        </div>
-    )
-
     return (
-        <div className='flex justify-center h-screen'>
-            {isCreatingDocument ?
+        <div className='flex justify-center'>
+            {isSubmitted &&
+                <div className="fixed inset-0 z-50 flex overflow-hidden items-center justify-center backdrop-blur-sm bg-gray-600/30">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4">🎉 Assignment Submitted!</h2>
+                        <p className="text-gray-700 mb-4">Your response has been successfully recorded.</p>
+                    </div>
+                </div>
+            }
+            {(!isSubmitted && isCreatingDocument) ?
                 <CreateAssignment content={assignmentContent} toggle={toggleView} updateContent={setAssignmentContent} updateSummary={setAssignmentSummary} submitAssignment={handleSubmit} /> :
                 <ReadCaseStudy content={caseStudyContent} toggle={toggleView} />
             }
