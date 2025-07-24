@@ -11,12 +11,11 @@ import { useEffect, useState } from 'react';
 
 
 export default function ManifestoPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const { showToast } = useToast();
   const router = useRouter();
   const [whatsappLink, setWhatsappLink] = useState('');
 
-  if(status != 'authenticated') router.push('/login');
   const questions = [
     {
       id: 1,
@@ -106,11 +105,13 @@ export default function ManifestoPage() {
         }
       );
 
+      if(!session) return;
 
       if (response.status === 200) {
         setLoading(false);
         setWhatsappLink(response.data.whatsappLink);
         showToast('success', 'Manifesto Submitted', 3000);
+        updateUserStatus(session?.user.uid, 'ROUND_2', update)
       } else {
         setLoading(false);
         setShowModal(false);

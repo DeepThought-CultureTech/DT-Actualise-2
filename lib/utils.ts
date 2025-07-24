@@ -1,13 +1,13 @@
 import { ObjectId } from 'mongodb'
 
-export function toObjectId(id: string): ObjectId { // converts string id into ObjectId
-  if (!id) {
-    throw new Error('ObjectId string cannot be empty')
-  }
-
-  if (!ObjectId.isValid(id)) {
-    throw new Error(`Invalid ObjectId format: ${id}`)
-  }
-
-  return new ObjectId(id)
-}
+export const formatEndTime = (hours: number) => {
+    const now = new Date();
+    const endTime = new Date(now.getTime() + hours * 60 * 60 * 1000);
+    return endTime.toLocaleString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
