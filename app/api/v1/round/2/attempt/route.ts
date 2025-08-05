@@ -61,14 +61,21 @@ export async function POST(req: NextRequest) {
         const { db } = await connectDatabase();
 
         const isAttempted = await db.collection("round2_attempts").findOne(
-            { userId },
-            { projection: { _id: 1 } }
+            { userId: toObjectId(userId) },
+            { projection: { _id: 1, isSubmitted: 1 } }
         );
 
         if (isAttempted?._id) {
-            return NextResponse.json({
-                message: 'Round 2 Already Attempted',
-            }, { status: 409 });
+            if(isAttempted?.isSubmitted) {
+                return NextResponse.json({
+                    message: 'Round 2 Already Submitted',
+                }, { status: 409 });
+            } else {
+                return NextResponse.json({
+                    attemptId: isAttempted._id,
+                    message: 'Round 2 Already Attempted',
+                }, { status: 200 });
+            }
         }
 
         const currentDate = new Date()

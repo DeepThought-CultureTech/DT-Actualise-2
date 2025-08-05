@@ -32,7 +32,6 @@ export async function connectDatabase() : Promise<{ client: MongoClient; db: Db}
 }
 
 export function toObjectId(id: string): ObjectId { // converts string id into ObjectId
-  console.log(id);
   if (!id) {
     throw new Error('ObjectId string cannot be empty')
   }
