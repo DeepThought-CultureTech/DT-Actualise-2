@@ -37,7 +37,6 @@ export default function RoleGallerySection() {
       try {
         const response = await axios.get('/api/v1/round/1/roles');
         setRoles(response.data.roles);
-        console.log(response.data.roles);
       } catch (error) {
         console.error('Error fetching roles:', error);
       }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useToast } from "@/components/Toast";
+import { formatEndTime } from "@/lib/utils";
 
 interface TimerModalProps {
   isOpen: boolean;
@@ -8,24 +9,12 @@ interface TimerModalProps {
 
 const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onTimelineSet }) => {
   const [customHours, setCustomHours] = useState<number>(24);
-    const { showToast } = useToast();
+  //const { showToast } = useToast();
 
   const handleSetTimeline = () => {
-    showToast('success', 'Round 1 Started!', 3000);
     onTimelineSet(customHours);
   };
 
-  const formatEndTime = (hours: number) => {
-    const now = new Date();
-    const endTime = new Date(now.getTime() + hours * 60 * 60 * 1000);
-    return endTime.toLocaleString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
 
   const quickOptions = [
     { label: '6h', value: 6 },
@@ -104,7 +93,7 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onTimelineSet }) => {
           onClick={handleSetTimeline}
           className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-4 rounded-2xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:scale-[1.02]"
         >
-          Start Challenge
+          Save Timeline
         </button>
       </div>
     </div>
