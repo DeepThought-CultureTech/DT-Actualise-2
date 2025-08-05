@@ -5,6 +5,8 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/Toast";
+import { useSession } from "next-auth/react";
+import { NextResponse } from "next/server";
 
 export default function page() {
     const [assignmentContent, setAssignmentContent] = useState({});
@@ -15,6 +17,8 @@ export default function page() {
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
     const attemptId = useSearchParams().get('id');
+    const { data: session } = useSession();
+
 
     useEffect(() => {
         const isAlreadySubmitted = localStorage.getItem('isRound2Submitted');
@@ -48,6 +52,20 @@ export default function page() {
             return;
         }
         async function submitAssignment() {
+            if (!session?.user?.email) {
+                showToast('error', 'Unable to detect user email', 3000);
+                return;
+            }
+            try {
+                const check = await axios.get(`/api/v1/round/2/summary?email=${session.user.email}`);
+                if (check?.data?.processed === true) {
+                    showToast('info', '✅ Feedback already provided.', 3000);
+                    return;
+                }
+            } catch (err) {
+                console.log(err);
+
+            }
             showToast('loading', 'Submitting Assignment', 3000);
             const response = await axios({
                 url: `/api/v1/round/2/attempt?id=${attemptId}`,
@@ -66,6 +84,25 @@ export default function page() {
                 showToast('success', 'Assignment Submitted!', 3000);
                 setIsSubmitted(true);
                 localStorage.setItem('isRound2Submitted', JSON.stringify(true));
+            }
+            try {
+                await axios.post('/api/v1/round/2/summary', {
+                    summary: assignmentSummary,
+                    email: session.user.email,
+                    processed: false
+                });
+
+                return NextResponse.json({
+                    message: "Summary submitted !!"
+                }, {
+                    status: 200
+                })
+
+            } catch (error) {
+                console.error('Error saving summary:', error);
+                return NextResponse.json({
+                    error: "Failed to save summary"
+                }, { status: 500 });
             }
         }
 
