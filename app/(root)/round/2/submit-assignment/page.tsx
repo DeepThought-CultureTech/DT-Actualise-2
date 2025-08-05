@@ -2,14 +2,15 @@
 import CreateAssignment from "@/components/round2/assignment-submission/CreateDocument";
 import ReadCaseStudy from "@/components/round2/assignment-submission/ReadCaseStudy";
 import axios from "axios";
+import LoadingSpinner from "@/components/round1/LoadingSpinner";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useToast } from "@/components/Toast";
 import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 import Round2SubmitModal from "@/components/round2/assignment-submission/Round2SubmitModal";
 
-export default function page() {
+const Page = () => {
     const [assignmentContent, setAssignmentContent] = useState({});
     const [assignmentSummary, setAssignmentSummary] = useState("");
     const [isCreatingDocument, setisCreatingDocument] = useState(false);
@@ -154,4 +155,3 @@ export default function page() {
         </div>
     )
 }
-
