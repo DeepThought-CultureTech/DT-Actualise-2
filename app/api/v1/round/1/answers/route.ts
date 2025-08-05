@@ -1,5 +1,5 @@
 import { connectDatabase } from "@/lib/mongodb";
-import { toObjectId } from "@/lib/utils";
+import { toObjectId } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { NextResponse, NextRequest } from "next/server";
 

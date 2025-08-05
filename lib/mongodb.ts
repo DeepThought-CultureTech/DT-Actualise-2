@@ -1,4 +1,4 @@
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient, Db, ObjectId } from 'mongodb';
 
 const uri = process.env.MONGODB_URI!;
 const dbName = process.env.MONGODB_DB!;
@@ -27,6 +27,19 @@ export async function connectDatabase() : Promise<{ client: MongoClient; db: Db}
 
     } catch(err) {
         console.error('Failed to connect with database', err);
-        throw new Error('Databae connection failed')
+        throw new Error('Database connection failed')
     }
+}
+
+export function toObjectId(id: string): ObjectId { // converts string id into ObjectId
+  console.log(id);
+  if (!id) {
+    throw new Error('ObjectId string cannot be empty')
+  }
+
+  if (!ObjectId.isValid(id)) {
+    throw new Error(`Invalid ObjectId format: ${id}`)
+  }
+
+  return new ObjectId(id)
 }

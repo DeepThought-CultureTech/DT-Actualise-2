@@ -1,6 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { X, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
+import TiptapEditor from "@/components/tiptap/TiptapEditor";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/components/Toast";
+import axios from "axios";
 
 interface CaseStudy {
   id: string;
@@ -8,7 +12,7 @@ interface CaseStudy {
   description: string;
   role: string;
   tags: string[];
-  content?: string;
+  content: string;
   readCount: number;
 }
 
@@ -20,14 +24,25 @@ interface CaseStudyModalProps {
 
 const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => {
   const router = useRouter();
+  const { showToast } = useToast();
+  const { data: session, status } = useSession();
+
+  const caseStudyContent = useMemo(() => {
+    if (!caseStudy?.content) return null;
+    try {
+      return JSON.parse(caseStudy.content);
+    } catch (error) {
+      console.error("Failed to parse caseStudy content:", error);
+      return null;
+    }
+  }, [caseStudy]);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     if (isOpen) {
       document.addEventListener("keydown", handleEsc);
-    } else {
-      document.removeEventListener("keydown", handleEsc);
     }
     return () => document.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
@@ -35,13 +50,31 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
   if (!isOpen || !caseStudy) return null;
 
   const handleLockInRole = () => {
-    // alert(`Locked in as ${caseStudy.role}! Redirecting...`);
-    router.push('/round/2/baby-step');
+    async function createRound2Attempt() {
+      const response = await axios({
+        url: '/api/v1/round/2/attempt',
+        method: 'POST',
+        headers: { 'Content-Type': "application/json" },
+        data: {
+          userId: session?.user.uid,
+          caseStudyId: caseStudy?.id
+        }
+      })
+
+      if(response.status != 200) {
+        showToast('error', 'Unable to Lock in Case Study', 3000);
+      } else {
+        const attemptId = response.data.attemptId;
+        router.push(`/round/2/baby-step?id=${attemptId}`);
+      }
+    }
+    
+    createRound2Attempt();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white w-[95vw] sm:w-[600px] lg:w-[900px] max-h-[90vh] rounded-lg shadow-xl flex flex-col overflow-hidden mx-4">
+      <div className="bg-white max-h-[90vh] rounded-lg shadow-xl flex flex-col overflow-hidden mx-4">
         {/* Header */}
         <div className="flex justify-between items-start p-4 sm:p-6 border-b">
           <div className="flex-1">
@@ -52,10 +85,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
               </span>
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {caseStudy.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="text-xs px-2 py-0.5 border border-gray-300 rounded text-gray-600"
-                  >
+                  <span key={index} className="text-xs px-2 py-0.5 border border-gray-300 rounded text-gray-600" >
                     #{tag}
                   </span>
                 ))}
@@ -70,31 +100,22 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
         {/* Scrollable Content */}
         <div className="overflow-y-auto px-4 sm:px-6 py-4 flex-1">
           <p className="text-gray-500 mb-6">{caseStudy.description}</p>
-          {caseStudy.content ? (
-            <div className="prose prose-sm max-w-none">
-              {caseStudy.content.split("\n\n").map((paragraph, index) => (
-                <p key={index} className="mb-4">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+          {caseStudyContent ? (
+            <TiptapEditor editable={false} content={caseStudyContent} />
           ) : (
-            <p className="text-sm text-gray-500 italic">No content available.</p>
+            <p className="text-sm text-gray-500 italic">No content available or failed to load.</p>
           )}
         </div>
 
         {/* Footer */}
         <div className="p-4 sm:p-6 border-t bg-gray-50">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-              Read by {caseStudy.readCount}+ professionals
-            </p>
+          <div className="flex justify-center gap-3">
             <button
               onClick={handleLockInRole}
               className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center justify-center w-full sm:w-auto hover:bg-blue-700 transition"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Lock in this role
+              Lock in Case Study
             </button>
           </div>
         </div>

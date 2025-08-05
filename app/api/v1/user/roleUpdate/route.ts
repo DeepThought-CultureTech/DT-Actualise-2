@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { connectDatabase } from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
-import { toObjectId } from "@/lib/utils";
+import { toObjectId } from "@/lib/mongodb";
 
 export async function PUT(req: NextRequest) {
     try {

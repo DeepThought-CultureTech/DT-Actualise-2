@@ -8,9 +8,6 @@ import { title } from "process";
 export async function GET(req: NextRequest) {
   try {
     const round =Number(req.nextUrl.searchParams.get("round"));
-    console.log(typeof round);
-
-    
     
     if (!round) {
       return NextResponse.json(

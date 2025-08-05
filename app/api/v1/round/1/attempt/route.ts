@@ -1,5 +1,5 @@
 import { connectDatabase } from "@/lib/mongodb";
-import { toObjectId } from "@/lib/utils";
+import { toObjectId } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { NextResponse, NextRequest } from "next/server";
 
@@ -128,9 +128,9 @@ export async function POST(req: NextRequest) {
         }, { status: 200})
         
     } catch (err) {
-        console.error('Error initiating round 1', err);
+        console.error('Error updating round 1 attempt', err);
         return NextResponse.json(
-            { error: "Failed to initiated round 1"}, 
+            { error: "Failed to update round 1 attempt"}, 
             {status: 500}
         )
     }

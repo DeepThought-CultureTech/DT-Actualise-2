@@ -25,10 +25,6 @@ const CaseStudyCard = ({ caseStudy, onViewCase }: CaseStudyCardProps) => {
           <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold">
             {caseStudy.role}
           </span>
-          {/* <div className="flex items-center text-xs text-gray-500">
-            <Users className="h-3 w-3 mr-1" />
-            {caseStudy.readCount}+ readers
-          </div> */}
         </div>
 
         <h3 className="text-lg font-semibold group-hover:text-blue-600 transition-colors mb-2">

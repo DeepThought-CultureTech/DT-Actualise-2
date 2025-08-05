@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 export default function ReadCaseStudy({ content, toggle } : { content: any, toggle: () => void }) {
   return (
     <main className='mb-10'>
-        <div className="w-full flex justify-between items-center p-4">
+        <div className="w-full flex justify-between items-center py-4">
         <span className="text-4xl tracking-tight font-bold text-blue-600 font-sans">
             Read Case Study
         </span>
