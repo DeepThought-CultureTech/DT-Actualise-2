@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { Sprout, Save } from 'lucide-react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { Sprout, Save, Lightbulb } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/round1/LoadingSpinner';
 import { useRouter } from 'next/navigation';
@@ -17,9 +17,9 @@ const Page = () => {
     const attemptId = useSearchParams().get('id');
     const [roleApplied, setRoleApplied] = useState("");
     const [caseStudyChosen, setCaseStudyChosen] = useState("");
-    
+
     const [timelineHours, setTimelineHours] = useState<number | null>(null);
-    
+
     const handleSave = () => {
         if (!babySteps.trim()) {
             showToast("error", "Please write your baby steps", 3000)
@@ -42,7 +42,7 @@ const Page = () => {
                 }
             });
 
-            if(response.status != 200) {
+            if (response.status != 200) {
                 showToast("error", 'Unable to Submit Baby Steps', 3000);
             } else {
                 showToast("success", "Baby Steps Submmitted", 3000)
@@ -54,7 +54,7 @@ const Page = () => {
     };
 
     useEffect(() => {
-        if(!attemptId) return;
+        if (!attemptId) return;
         async function getAttemptData(id: string) {
             const response = await axios({
                 url: `/api/v1/round/2/attempt?id=${id}`,
@@ -63,7 +63,7 @@ const Page = () => {
             });
 
 
-            if(response.status != 200) {
+            if (response.status != 200) {
                 showToast('error', "Unable to fetch user details", 3000);
             } else {
                 setRoleApplied(response.data.roleTitle);
@@ -146,11 +146,11 @@ const Page = () => {
 };
 
 const BabyStepsPage: React.FC = () => {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <Page />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <Page />
+        </Suspense>
+    );
 };
 
 export default BabyStepsPage;
