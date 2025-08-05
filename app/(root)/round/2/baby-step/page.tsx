@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Sprout, Save } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import LoadingSpinner from '@/components/round1/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/Toast';
 import TimerModal from '@/components/round1/TimeModal';
@@ -143,4 +144,12 @@ const Page = () => {
     );
 };
 
-export default Page;
+const BabyStepsPage: React.FC = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Page />
+    </Suspense>
+  );
+};
+
+export default BabyStepsPage;
