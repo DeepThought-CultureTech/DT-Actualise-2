@@ -24,7 +24,7 @@ export default function RoundTwoHero() {
       <div>
         <Image
           className="h-30 m-3 mt-7 rounded-2xl border-4" 
-          src={"/round2hook.svg"} 
+          src={"/round2hooks.png"} 
           height={500} 
           width={500} 
           alt="Round 2 Hook"/>

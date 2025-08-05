@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
-import { Sprout, Save } from 'lucide-react';
+import { Sprout, Save, Lightbulb } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/round1/LoadingSpinner';
 import { useRouter } from 'next/navigation';
@@ -17,8 +17,9 @@ const Page = () => {
     const attemptId = useSearchParams().get('id');
     const [roleApplied, setRoleApplied] = useState("");
     const [caseStudyChosen, setCaseStudyChosen] = useState("");
+
     const [timelineHours, setTimelineHours] = useState<number | null>(null);
-    
+
     const handleSave = () => {
         if (!babySteps.trim()) {
             showToast("error", "Please write your baby steps", 3000)
@@ -41,7 +42,7 @@ const Page = () => {
                 }
             });
 
-            if(response.status != 200) {
+            if (response.status != 200) {
                 showToast("error", 'Unable to Submit Baby Steps', 3000);
             } else {
                 showToast("success", "Baby Steps Submmitted", 3000)
@@ -53,7 +54,7 @@ const Page = () => {
     };
 
     useEffect(() => {
-        if(!attemptId) return;
+        if (!attemptId) return;
         async function getAttemptData(id: string) {
             const response = await axios({
                 url: `/api/v1/round/2/attempt?id=${id}`,
@@ -62,7 +63,7 @@ const Page = () => {
             });
 
 
-            if(response.status != 200) {
+            if (response.status != 200) {
                 showToast('error', "Unable to fetch user details", 3000);
             } else {
                 setRoleApplied(response.data.roleTitle);
@@ -80,10 +81,10 @@ const Page = () => {
                 <div className="text-center mb-12">
                     <div className="bg-blue-600 rounded-2xl py-8 px-6 shadow-lg">
                         <div className="flex items-center justify-center gap-4 mb-3">
-                            <Sprout className="w-10 h-10 text-white" />
-                            <h1 className="text-5xl font-bold text-white tracking-tight">Baby Steps</h1>
+                            <Lightbulb className="w-[3rem] h-[3rem] text-white" />
+                            <h1 className="text-4xl font-bold text-white tracking-tight">Baby Steps</h1>
                         </div>
-                        <p className="text-xl text-blue-100 font-medium">Small steps, big progress</p>
+                        <p className="text-lg text-blue-100 font-medium">Small steps, big progress</p>
                     </div>
                 </div>
 
@@ -95,14 +96,14 @@ const Page = () => {
                         { title: 'Case Study Chosen', value: caseStudyChosen },
                     ].map((item) => (
                         <div key={item.title} className="bg-white rounded-2xl border-2 p-6">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-2">{item.title}</h2>
-                            <p className="text-gray-600 text-lg">{item.value}</p>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h2>
+                            <p className="text-gray-600 text-md">{item.value}</p>
                         </div>
                     ))}
 
                     {/* Timeline Selector (Replaced with Modal Trigger) */}
                     <div className="bg-white rounded-2xl border-2 p-6">
-                        <h2 className="text-2xl font-semibold text-gray-900 mb-3">Self-defined Timeline</h2>
+                        <h2 className="text-xl font-semibold text-gray-900 mb-3">Self-defined Timeline</h2>
                         <button
                             onClick={() => setIsModalOpen(true)}
                             className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -114,7 +115,7 @@ const Page = () => {
 
                     {/* Baby Steps Text Area */}
                     <div className="bg-white rounded-2xl border-2 p-6">
-                        <h2 className="text-2xl font-semibold text-gray-900 mb-3">Your Baby Steps</h2>
+                        <h2 className="text-xl font-semibold text-gray-900 mb-3">Your Baby Steps</h2>
                         <textarea
                             placeholder="Write your baby steps here... What small actions will you take to reach your goal?"
                             value={babySteps}
@@ -123,7 +124,7 @@ const Page = () => {
                         />
                         <button
                             onClick={handleSave}
-                            className="w-full mt-5 flex items-center justify-center bg-blue-600 text-white py-3 text-lg px-6 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                            className="w-full mt-5 flex items-center justify-center bg-blue-600 text-white py-3 text-md px-6 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                         >
                             <Save className="w-5 h-5 mr-3" />
                             Submit
@@ -145,11 +146,11 @@ const Page = () => {
 };
 
 const BabyStepsPage: React.FC = () => {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <Page />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <Page />
+        </Suspense>
+    );
 };
 
 export default BabyStepsPage;

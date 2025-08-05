@@ -10,7 +10,9 @@ interface Props {
 
 export default function HeroSection({ search, onSearchChange }: Props) {
   return (
-    <section className="bg-blue-600 py-16 px-4 text-center">
+    <section className="bg-blue-600 py-16 px-4 text-center" style={{
+        backgroundImage: 'linear-gradient(to bottom right, rgba(33, 109, 223, 1), #002B80)',
+      }}>
       <div className="max-w-4xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -36,15 +38,15 @@ export default function HeroSection({ search, onSearchChange }: Props) {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="relative max-w-md mx-auto flex items-center"
         >
-          <Search className="absolute left-[-40px] text-white w-7 h-7" />
           <input
             id="search"
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by title, keyword, or tag"
-            className="w-full pl-5 py-3 text-base bg-white/90 backdrop-blur-md shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            className="w-full px-4 pr-10 py-3 text-base bg-white/90 backdrop-blur-md shadow-lg rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
           />
+          <Search className="absolute right-3 text-gray-400 w-7 h-7" />
         </motion.div>
       </div>
     </section>
