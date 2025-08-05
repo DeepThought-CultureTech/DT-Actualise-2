@@ -68,10 +68,10 @@ export default function ManifestoPage() {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   };
 
-  // const handleCopyLink = () => {
-  //   navigator.clipboard.writeText(whatsappLink);
-  //   showToast('success', 'Link Copied to clipboard!', 2000);
-  // };
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(whatsappLink);
+    showToast('success', 'Link Copied to clipboard!', 2000);
+  };
 
   const handleManifestoSubmit = async () => {
     if (!session) {
@@ -179,19 +179,25 @@ export default function ManifestoPage() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
-                  <button
+                  {/* <button
                     onClick={() => router.push('/round/2')} // 👈 Show Modal Instead of Link
                     className="px-5 py-2 bg-blue-600 text-white rounded-[0.5rem] font-semibold hover:bg-blue-700 transition-all text-center"
                   >
                     Join Round 2 
+                  </button> */}
+                  <button
+                    onClick={() => router.push(whatsappLink)} // 👈 Show Modal Instead of Link
+                    className="px-5 py-2 bg-blue-600 text-white rounded-[0.5rem] font-semibold hover:bg-blue-700 transition-all text-center"
+                  >
+                    Join Round 2 
                   </button>
-                  {/* <button
-                    
+                  <button
+                    onClick={handleCopyLink}
                     className="p-2 border rounded-xl hover:bg-gray-100 transition"
                     title="Copy WhatsApp Invite Link"
                   >
                     <Copy className="w-[25px] h-[25px] text-gray-600" />
-                  </button> */}
+                  </button>
                 </div>
               </div>
             )}
