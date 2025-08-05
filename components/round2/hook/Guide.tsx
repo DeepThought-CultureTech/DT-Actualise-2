@@ -34,7 +34,7 @@ export default function Guide() {
         {/* Right Image */}
         <div className="rounded-3xl overflow-hidden bg-grey-300 shadow-lg">
           <Image
-            src="/round2steps.svg"
+            src="/round2stepss.png"
             alt="Person working with analytics"
             width={800}
             height={300}

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/components/Toast";
 import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
+import Round2SubmitModal from "@/components/round2/assignment-submission/Round2SubmitModal";
 
 export default function page() {
     const [assignmentContent, setAssignmentContent] = useState({});
@@ -17,6 +18,8 @@ export default function page() {
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
     const attemptId = useSearchParams().get('id');
+    const [showRedirectModal, setShowRedirectModal] = useState(false);
+
     const { data: session } = useSession();
 
 
@@ -83,7 +86,10 @@ export default function page() {
             } else {
                 showToast('success', 'Assignment Submitted!', 3000);
                 setIsSubmitted(true);
+                // localStorage.setItem('isRound2Submitted', JSON.stringify(true));
+                setShowRedirectModal(true); // Show the modal instead of setting isSubmitted
                 localStorage.setItem('isRound2Submitted', JSON.stringify(true));
+
             }
             try {
                 await axios.post('/api/v1/round/2/summary', {
@@ -121,14 +127,26 @@ export default function page() {
 
     return (
         <div className='flex justify-center'>
-            {isSubmitted &&
+
+            <Round2SubmitModal
+                show={showRedirectModal}
+                loading={false}
+                onClose={() => setShowRedirectModal(false)}
+                onCopy={() => {
+                    navigator.clipboard.writeText('https://chat.whatsapp.com/DDJRGHHYnJMFgmYv41WdjW');
+                    showToast('success', 'Link copied!');
+                }}
+                whatsappGroupLink="https://chat.whatsapp.com/DDJRGHHYnJMFgmYv41WdjW"
+            />
+
+            {/* {isSubmitted &&
                 <div className="fixed inset-0 z-50 flex overflow-hidden items-center justify-center backdrop-blur-sm bg-gray-600/30">
                     <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
                         <h2 className="text-2xl font-bold text-blue-600 mb-4">🎉 Assignment Submitted!</h2>
                         <p className="text-gray-700 mb-4">Your response has been successfully recorded.</p>
                     </div>
                 </div>
-            }
+            } */}
             {(!isSubmitted && isCreatingDocument) ?
                 <CreateAssignment content={assignmentContent} toggle={toggleView} updateContent={setAssignmentContent} updateSummary={setAssignmentSummary} submitAssignment={handleSubmit} /> :
                 <ReadCaseStudy content={caseStudyContent} toggle={toggleView} />
@@ -136,3 +154,4 @@ export default function page() {
         </div>
     )
 }
+

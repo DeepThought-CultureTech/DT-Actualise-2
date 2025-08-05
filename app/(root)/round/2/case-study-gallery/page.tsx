@@ -85,7 +85,7 @@ export default function CaseStudiesPage() {
     roles.find((r) => r.id === roleId)?.title ?? "Unknown Role";
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen mx-[100px]">
       <CaseStudyHero search={search} onSearchChange={handleSearchChange} />
 
       <div className="mt-6 flex justify-center">

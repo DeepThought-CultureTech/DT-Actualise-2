@@ -74,7 +74,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white max-h-[90vh] rounded-lg shadow-xl flex flex-col overflow-hidden mx-4">
+      <div className="w-[1100px] bg-white max-h-[90vh] rounded-lg shadow-xl flex flex-col overflow-hidden mx-4">
         {/* Header */}
         <div className="flex justify-between items-start p-4 sm:p-6 border-b">
           <div className="flex-1">
@@ -98,7 +98,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto px-4 sm:px-6 py-4 flex-1">
+        <div className="overflow-y-auto flex flex-col items-center px-4 sm:px-6 py-4 flex-1">
           <p className="text-gray-500 mb-6">{caseStudy.description}</p>
           {caseStudyContent ? (
             <TiptapEditor editable={false} content={caseStudyContent} />
@@ -115,7 +115,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }: CaseStudyModalProps) => 
               className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center justify-center w-full sm:w-auto hover:bg-blue-700 transition"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Lock in Case Study
+              Confirm
             </button>
           </div>
         </div>
